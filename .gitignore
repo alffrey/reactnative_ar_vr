@@ -128,3 +128,9 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# custom
+.DS_Store
+android/.DS_Store
+android/app/build/*
+android/.gradle/*
