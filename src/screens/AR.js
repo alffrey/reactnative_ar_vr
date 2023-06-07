@@ -6,6 +6,7 @@ import {
   ViroTrackingStateConstants,
   ViroARSceneNavigator,
 } from '@viro-community/react-viro';
+import { styles } from '../styles/style';
 
 const HelloWorldSceneAR = () => {
   const [text, setText] = useState('Initializing AR...');
@@ -31,7 +32,7 @@ const HelloWorldSceneAR = () => {
   );
 };
 
-export default () => {
+export default function Ar (){
   return (
     <ViroARSceneNavigator
       autofocus={true}
@@ -42,14 +43,3 @@ export default () => {
     />
   );
 };
-
-var styles = StyleSheet.create({
-  f1: {flex: 1},
-  helloWorldTextStyle: {
-    fontFamily: 'Arial',
-    fontSize: 30,
-    color: '#ffffff',
-    textAlignVertical: 'center',
-    textAlign: 'center',
-  },
-});
