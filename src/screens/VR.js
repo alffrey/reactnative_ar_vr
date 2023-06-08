@@ -4,7 +4,7 @@ import { styles } from '../styles/style';
 export default function Vr(){
     return(
         <View>
-            <Text>
+            <Text style={styles.text}>
                 VR Screen
             </Text>
         </View>

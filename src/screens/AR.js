@@ -7,30 +7,7 @@ import {
   ViroARSceneNavigator,
 } from '@viro-community/react-viro';
 import { styles } from '../styles/style';
-
-const HelloWorldSceneAR = () => {
-  const [text, setText] = useState('Initializing AR...');
-
-  function onInitialized(state, reason) {
-    console.log('guncelleme', state, reason);
-    if (state === ViroTrackingStateConstants.TRACKING_NORMAL) {
-      setText('Hello World!');
-    } else if (state === ViroTrackingStateConstants.TRACKING_UNAVAILABLE) {
-      // Handle loss of tracking
-    }
-  }
-
-  return (
-    <ViroARScene onTrackingUpdated={onInitialized}>
-      <ViroText
-        text={text}
-        scale={[0.5, 0.5, 0.5]}
-        position={[0, 0, -1]}
-        style={styles.helloWorldTextStyle}
-      />
-    </ViroARScene>
-  );
-};
+import HelloWorldSceneAR from './hello_world_scene';
 
 export default function Ar (){
   return (
