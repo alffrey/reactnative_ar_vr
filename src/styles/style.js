@@ -42,7 +42,16 @@ var styles = StyleSheet.create({
     backgroundColor:'#ffffff',
     display:'flex',
     flexDirection:'row',
-    justifyContent: 'space-between',
+    alignItems:'center',
+    justifyContent: 'center',
+    margin:10,
+    padding:10,
+  },
+  Buttext:{
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'blue',
+    textAlign: 'center',
   }
   });
  export {styles};

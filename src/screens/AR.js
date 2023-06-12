@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { View } from 'react-native';
+import React, { useState } from 'react';
+import { View,Text,TouchableOpacity } from 'react-native';
 import {
   ViroARScene,
   ViroARPlaneSelector,
@@ -7,28 +7,22 @@ import {
   ViroMaterials,
   ViroARSceneNavigator,
   ViroAnimations,
-  ViroConstants,
 } from '@viro-community/react-viro';
+import { styles } from '../styles/style';
 
-export class PlaneDetectionScene extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      planeWidth: 0,
-      planeHeight: 0,
-      planeLength: 0,
-      cubePosition: [0, -1, -1], // Initial position of the cube
-    };
-  }
+const PlaneDetectionScene = (props) => {
+  let data=props.sceneNavigator.viroAppProps;
+  const [planeWidth, setPlaneWidth] = useState(0);
+  const [planeHeight, setPlaneHeight] = useState(0);
+  const [planeLength, setPlaneLength] = useState(0);
+  const [cubePosition, setCubePosition] = useState([0, -1, -1]);
 
-  _onPlaneSelected = (anchor) => {
+  const _onPlaneSelected = (anchor) => {
     const { width, height, length, position } = anchor;
-    this.setState({
-      planeWidth: width,
-      planeHeight: height,
-      planeLength: length,
-      cubePosition: position, // Update the cube position to the detected plane position
-    });
+    setPlaneWidth(width);
+    setPlaneHeight(height);
+    setPlaneLength(length);
+    setCubePosition(position);
 
     console.log('Plane detected!');
     console.log('Width:', width);
@@ -36,37 +30,46 @@ export class PlaneDetectionScene extends Component {
     console.log('Length:', length);
   };
 
-  render() {
-    const { cubePosition } = this.state;
-
-    return (
-      <ViroARScene>
+  return (
+    <ViroARScene>
         <ViroARPlaneSelector
-          minHeight={0.01}
-          minWidth={0.01}
-          onPlaneSelected={this._onPlaneSelected}
-          alignment='ViroConstants.ARPlaneAlignmentTypes.HorizontalVertical'
-        >
-          <ViroBox
-            height={2}
-            length={2}
-            width={2}
-            position={cubePosition} // Set the position of the cube based on the detected plane
-            scale={[0.2, 0.2, 0.2]}
-            materials={['wood']}
-            animation={{ name: 'rotate', loop: true, run: true }}
-          />
-        </ViroARPlaneSelector>
-      </ViroARScene>
-    );
-  }
-}
+        minHeight={0.01}
+        minWidth={0.01}
+        onPlaneSelected={_onPlaneSelected}
+        alignment={ViroARPlaneSelector.HorizontalVertical}
+      >
+        <ViroBox
+          height={2}
+          length={2}
+          width={2}
+          position={cubePosition}
+          scale={[0.2, 0.2, 0.2]}
+          materials={data.object}
+          animation={{ name: 'rotate', loop: true, run: true }}
+        />
+      </ViroARPlaneSelector>
+    </ViroARScene>
+  );
+};
 
 ViroMaterials.createMaterials({
   wood: {
     diffuseTexture: require('../../assets/images/wood_texture.jpg'),
   },
+  metal: {
+    diffuseTexture: require('../../assets/images/metal.jpg'),
+  },
+  polishedwood: {
+    diffuseTexture: require('../../assets/images/polished_wood.jpg'),
+  },
+  gold: {
+    diffuseTexture: require('../../assets/images/gold.jpg'),
+  },
+  white: {
+    diffuseTexture: require('../../assets/images/white.jpg'),
+  },
 });
+
 ViroAnimations.registerAnimations({
   rotate: {
     duration: 2500,
@@ -79,12 +82,29 @@ ViroAnimations.registerAnimations({
 });
 
 export default function App() {
+  const [currentMaterial, setCurrentMaterial] = useState('wood');
+  const array=['wood','metal','polishedwood','gold','white'];
+  const [num,setNum]=useState(0);
+  const _handleTextureChange = () => {
+    let n=num+1;
+    n=n%(array.length);
+    setNum(n);
+    setCurrentMaterial(array[num]);;
+  };
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.mainview}>
       <ViroARSceneNavigator
         autofocus={true}
         initialScene={{ scene: PlaneDetectionScene }}
+        viroAppProps={{"object":currentMaterial}}
+        style={{ flex: 9 }}
       />
+      <View style={styles.controlsview}>
+        <TouchableOpacity onPress={_handleTextureChange}>
+          <Text style={styles.Buttext}>Change Texture</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
+

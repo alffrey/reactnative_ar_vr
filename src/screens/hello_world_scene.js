@@ -8,7 +8,7 @@ import {
     ViroAnimations,
   } from '@viro-community/react-viro';
   import { styles } from '../styles/style';
-
+  
   export default function HelloWorldSceneAR() {
     ViroMaterials.createMaterials({
       wood:{
