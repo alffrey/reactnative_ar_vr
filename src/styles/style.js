@@ -7,6 +7,9 @@ var styles = StyleSheet.create({
       alignItems: 'center',
       backgroundColor: '#F5F5F5',
     },
+    mainview:{
+      flex:1,
+    },
     button: {
       marginVertical: 10,
       paddingHorizontal: 20,
@@ -33,6 +36,14 @@ var styles = StyleSheet.create({
     textAlignVertical: 'center',
     textAlign: 'center',
   },
+  controlsview:{
+    width:'100%',
+    height:100,
+    backgroundColor:'#ffffff',
+    display:'flex',
+    flexDirection:'row',
+    justifyContent: 'space-between',
+  }
   });
  export {styles};
 

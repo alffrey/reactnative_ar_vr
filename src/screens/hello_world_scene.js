@@ -2,29 +2,37 @@ import React, {useState} from 'react';
 import {
     ViroARScene,
     ViroText,
+    ViroBox,
     ViroTrackingStateConstants,
+    ViroMaterials,
+    ViroAnimations,
   } from '@viro-community/react-viro';
   import { styles } from '../styles/style';
 
   export default function HelloWorldSceneAR() {
-    const [text, setText] = useState('Initializing AR...');
-  
-    function onInitialized(state, reason) {
-      console.log('guncelleme', state, reason);
-      if (state === ViroTrackingStateConstants.TRACKING_NORMAL) {
-        setText('Hello Tharun!');
-      } else if (state === ViroTrackingStateConstants.TRACKING_UNAVAILABLE) {
-        // Handle loss of tracking
+    ViroMaterials.createMaterials({
+      wood:{
+        diffuseTexture:require('../../assets/images/wood_texture.jpg')
       }
-    }
-  
+    })
+    ViroAnimations.registerAnimations({
+      rotate:{
+          duration:2500,
+          properties:{
+            rotateY:'+=90'
+          }
+      }
+    })
     return (
-      <ViroARScene onTrackingUpdated={onInitialized}>
-        <ViroText
-          text={text}
-          scale={[0.5, 0.5, 0.5]}
-          position={[0, 0, -1]}
-          style={styles.helloWorldTextStyle}
+      <ViroARScene >
+        <ViroBox 
+          height={2}
+          lenght={2}
+          width={2}
+          position={[0,-1,-1]}
+          scale={[0.2,0.2,0.2]}
+          materials={["wood"]}
+          animation={{name:'rotate',loop:true,run:true}}
         />
       </ViroARScene>
     );
