@@ -7,22 +7,8 @@ var styles = StyleSheet.create({
       alignItems: 'center',
       backgroundColor: '#F5F5F5',
     },
-    mainview:{
-      flex:1,
-    },
-    button: {
-      marginVertical: 10,
-      paddingHorizontal: 20,
-      paddingVertical: 10,
-      borderRadius: 8,
-      backgroundColor: '#2196F3',
-    },
-    buttonText: {
-      color: 'white',
-      fontSize: 18,
-      fontWeight: 'bold',
-    },
-    f1: {flex: 1},
+   
+  f1: {flex: 1},
   helloWorldTextStyle: {
     fontFamily: 'Arial',
     fontSize: 30,
@@ -36,23 +22,64 @@ var styles = StyleSheet.create({
     textAlignVertical: 'center',
     textAlign: 'center',
   },
-  controlsview:{
-    width:'100%',
-    height:100,
-    backgroundColor:'#ffffff',
-    display:'flex',
-    flexDirection:'row',
-    alignItems:'center',
-    justifyContent: 'center',
-    margin:10,
-    padding:10,
-  },
+  
   Buttext:{
     fontSize: 20,
     fontWeight: 'bold',
     color: 'blue',
     textAlign: 'center',
-  }
+  },
+  mainview: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+  },
+  controlsview: {
+    flex: 0.1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    marginBottom: 10, // Add marginBottom to create a gap
+  },
+  circle: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginHorizontal: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'transparent', // Set background color to transparent
+  },
+  circleImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+  },
+  button: {
+    backgroundColor: '#EE82EE',
+    borderRadius: 5,
+    padding: 10,
+    alignSelf: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  changeObjectButton: {
+    backgroundColor: '#4B0082',
+    borderRadius: 5,
+    padding: 10,
+    alignSelf: 'center',
+    marginTop: 10, // Add marginTop to create a gap
+  },
+  changeObjectButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
   });
  export {styles};
 

@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
-import { View,Text,TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, Animated, PanResponder } from 'react-native';
 import {
   ViroARScene,
   ViroARPlaneSelector,
   ViroBox,
+  ViroSphere,
   ViroMaterials,
   ViroARSceneNavigator,
   ViroAnimations,
 } from '@viro-community/react-viro';
 import { styles } from '../styles/style';
 
+
 const PlaneDetectionScene = (props) => {
-  let data=props.sceneNavigator.viroAppProps;
+  let data = props.sceneNavigator.viroAppProps;
   const [planeWidth, setPlaneWidth] = useState(0);
   const [planeHeight, setPlaneHeight] = useState(0);
   const [planeLength, setPlaneLength] = useState(0);
@@ -30,23 +32,41 @@ const PlaneDetectionScene = (props) => {
     console.log('Length:', length);
   };
 
-  return (
-    <ViroARScene>
-        <ViroARPlaneSelector
-        minHeight={0.01}
-        minWidth={0.01}
-        onPlaneSelected={_onPlaneSelected}
-        alignment={ViroARPlaneSelector.HorizontalVertical}
-      >
+  const renderObject = () => {
+    if (data.object) {
+      return (
         <ViroBox
           height={2}
           length={2}
           width={2}
           position={cubePosition}
           scale={[0.2, 0.2, 0.2]}
-          materials={data.object}
+          materials={data.texture}
           animation={{ name: 'rotate', loop: true, run: true }}
         />
+      );
+    } else {
+      return (
+        <ViroSphere
+          radius={1}
+          position={cubePosition}
+          scale={[0.2, 0.2, 0.2]}
+          materials={data.texture}
+          animation={{ name: 'rotate', loop: true, run: true }}
+        />
+      );
+    }
+  };
+  
+  return (
+    <ViroARScene>
+         <ViroARPlaneSelector
+        minHeight={0.01}
+        minWidth={0.01}
+        onPlaneSelected={_onPlaneSelected}
+        alignment={ViroARPlaneSelector.HorizontalVertical}
+      >
+      {renderObject()}
       </ViroARPlaneSelector>
     </ViroARScene>
   );
@@ -83,28 +103,65 @@ ViroAnimations.registerAnimations({
 
 export default function App() {
   const [currentMaterial, setCurrentMaterial] = useState('wood');
-  const array=['wood','metal','polishedwood','gold','white'];
-  const [num,setNum]=useState(0);
-  const _handleTextureChange = () => {
-    let n=num+1;
-    n=n%(array.length);
-    setNum(n);
-    setCurrentMaterial(array[num]);;
+  const [isBoxVisible, setIsBoxVisible] = useState(true);
+  const array = ['wood', 'metal', 'polishedwood', 'gold', 'white'];
+  const imageSources = {
+    wood: require('../../assets/images/wood_texture.jpg'),
+    metal: require('../../assets/images/metal.jpg'),
+    polishedwood: require('../../assets/images/polished_wood.jpg'),
+    gold: require('../../assets/images/gold.jpg'),
+    white: require('../../assets/images/white.jpg'),
   };
+  const [showTextureSelection, setShowTextureSelection] = useState(true);
+  
+  const _handleTextureChange = (material) => {
+    setCurrentMaterial(material);
+  };
+
+  const _handleButtonClick = () => {
+    setShowTextureSelection(false);
+  };
+
+  const _handleObjectChange = () => {
+    if(isBoxVisible==true)
+     setIsBoxVisible(false);
+    else
+     setIsBoxVisible(true); // Change the material of the objects
+  };
+
   return (
     <View style={styles.mainview}>
       <ViroARSceneNavigator
         autofocus={true}
         initialScene={{ scene: PlaneDetectionScene }}
-        viroAppProps={{"object":currentMaterial}}
+        viroAppProps={{ texture: currentMaterial, object: isBoxVisible }}
         style={{ flex: 9 }}
       />
-      <View style={styles.controlsview}>
-        <TouchableOpacity onPress={_handleTextureChange}>
-          <Text style={styles.Buttext}>Change Texture</Text>
-        </TouchableOpacity>
-      </View>
+      {showTextureSelection ? (
+        <View style={styles.controlsview}>
+          <TouchableOpacity onPress={_handleButtonClick} style={styles.button}>
+            <Text style={styles.buttonText}>Change Texture</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <View style={styles.controlsview}>
+          {array.map((material, index) => (
+            <TouchableOpacity
+              key={index}
+              onPress={() => _handleTextureChange(material)}
+              style={[styles.circle]}
+            >
+              <Image source={imageSources[material]} style={styles.circleImage} />
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
+      <TouchableOpacity onPress={_handleObjectChange} style={styles.button}>
+        <Text style={styles.buttonText}>Change Object</Text>
+      </TouchableOpacity>
     </View>
   );
 }
+
+
 
