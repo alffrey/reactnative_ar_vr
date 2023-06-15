@@ -8,6 +8,7 @@ import {
   ViroMaterials,
   ViroARSceneNavigator,
   ViroAnimations,
+  ViroNode,
 } from '@viro-community/react-viro';
 import { styles } from '../styles/style';
 
@@ -32,43 +33,69 @@ const PlaneDetectionScene = (props) => {
     console.log('Length:', length);
   };
 
-  const renderObject = () => {
-    if (data.object) {
-      return (
-        <ViroBox
-          height={2}
-          length={2}
-          width={2}
-          position={cubePosition}
-          scale={[0.2, 0.2, 0.2]}
-          materials={data.texture}
-          animation={{ name: 'rotate', loop: true, run: true }}
-        />
-      );
-    } else {
-      return (
-        <ViroSphere
-          radius={1}
-          position={cubePosition}
-          scale={[0.2, 0.2, 0.2]}
-          materials={data.texture}
-          animation={{ name: 'rotate', loop: true, run: true }}
-        />
-      );
-    }
-  };
-  
+
+
   return (
     <ViroARScene>
-         <ViroARPlaneSelector
+      <ViroARPlaneSelector
         minHeight={0.01}
         minWidth={0.01}
         onPlaneSelected={_onPlaneSelected}
         alignment={ViroARPlaneSelector.HorizontalVertical}
       >
-      {renderObject()}
-      </ViroARPlaneSelector>
-    </ViroARScene>
+    <ViroNode position={[0, 1, -1]} rotation={[0, 0, 0]} scale={[4, 3, 4]}>
+      {[...Array(16)].map((_, index) => (
+        <ViroNode
+          key={index}
+          position={[(index % 4) * 0.4, Math.floor(index / 4) * 0.4, -1]}
+          rotation={[0, 0, 0]}
+          scale={[1, 1, 1]}
+        >
+          <ViroBox
+            height={0.2}
+            length={2}
+            width={2}
+            position={[0, -0.4, -1]}
+            scale={[0.2, 0.2, 0.2]}
+            materials={data.texture}
+          />
+          <ViroBox
+            height={0.2}
+            length={2}
+            width={2}
+            position={[0, -0, -1]}
+            scale={[0.2, 0.2, 0.2]}
+            materials={data.texture}
+          />
+          <ViroBox
+            height={2}
+            length={0.2}
+            width={2}
+            position={[0, -0.2, -1.2]}
+            scale={[0.2, 0.2, 0.2]}
+            materials={data.texture}
+          />
+          <ViroBox
+            height={2}
+            length={2}
+            width={0.2}
+            position={[0.2, -0.2, -1]}
+            scale={[0.2, 0.2, 0.2]}
+            materials={data.texture}
+          />
+          <ViroBox
+            height={2}
+            length={2}
+            width={0.2}
+            position={[-0.2, -0.2, -1]}
+            scale={[0.2, 0.2, 0.2]}
+            materials={data.texture}
+          />
+        </ViroNode>
+      ))}
+    </ViroNode>
+    </ViroARPlaneSelector>
+  </ViroARScene>
   );
 };
 
@@ -113,7 +140,7 @@ export default function App() {
     white: require('../../assets/images/white.jpg'),
   };
   const [showTextureSelection, setShowTextureSelection] = useState(true);
-  
+
   const _handleTextureChange = (material) => {
     setCurrentMaterial(material);
   };
@@ -123,10 +150,10 @@ export default function App() {
   };
 
   const _handleObjectChange = () => {
-    if(isBoxVisible==true)
-     setIsBoxVisible(false);
+    if (isBoxVisible == true)
+      setIsBoxVisible(false);
     else
-     setIsBoxVisible(true); // Change the material of the objects
+      setIsBoxVisible(true); // Change the material of the objects
   };
 
   return (
