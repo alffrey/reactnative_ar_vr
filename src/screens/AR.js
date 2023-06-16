@@ -32,6 +32,12 @@ const PlaneDetectionScene = (props) => {
     console.log('Height:', height);
     console.log('Length:', length);
   };
+    const [boxPosition, setBoxPosition] = useState([0, 0, -1]);
+  
+    const handleDrag = (draggedPos, source) => {
+      // Update the position of the box based on the drag position
+      setBoxPosition([draggedPos[0], draggedPos[1], -1]);
+    };
 
 
 
@@ -43,7 +49,7 @@ const PlaneDetectionScene = (props) => {
         onPlaneSelected={_onPlaneSelected}
         alignment={ViroARPlaneSelector.HorizontalVertical}
       >
-    <ViroNode position={[0, 1, -1]} rotation={[0, 0, 0]} scale={[4, 3, 4]}>
+    <ViroNode position={[0, 1, -1]} rotation={[0, 0, 0]} scale={[4, 3, 4]} onDrag={handleDrag}>
       {[...Array(16)].map((_, index) => (
         <ViroNode
           key={index}
