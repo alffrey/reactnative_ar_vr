@@ -5,19 +5,19 @@ import { styles } from '../styles/style';
 
 const Home= ({ navigation }) => {
 
-    const handler1=()=>{
-        navigation.navigate('Ar');
-    }
-    const handler2=()=>{
-        navigation.navigate('Vr');
-    }
+  const handleNavigation = (view) => {
+      navigation.navigate(view);
+  }
   
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={handler1}>
+      <TouchableOpacity style={styles.button} onPress={() => handleNavigation('AR')}>
         <Text style={styles.buttonText}>View in AR</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={handler2}>
+      <TouchableOpacity style={styles.button} onPress={() => handleNavigation('AR_Hello')}>
+        <Text style={styles.buttonText}>View in AR_Hello</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={() => handleNavigation('VR')}>
         <Text style={styles.buttonText}>View in VR</Text>
       </TouchableOpacity>
     </View>
