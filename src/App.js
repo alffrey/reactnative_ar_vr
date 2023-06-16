@@ -13,9 +13,9 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // import { createStackNavigator} from '@react-navigation/stack'
-import Home from './screens/Home';
+import Home from './screens/home';
 import AR from './screens/AR';
-import AR_Hello from './screens/AR_Hello';
+import AR_Hello from './screens/hello_world_scene';
 import VR from './screens/VR';
 // import { styles } from './styles/style';
 
