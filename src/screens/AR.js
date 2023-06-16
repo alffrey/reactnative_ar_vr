@@ -1,138 +1,216 @@
 import React, { useState } from 'react';
-import { View,Text,TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, Animated, PanResponder } from 'react-native';
 import {
   ViroARScene,
   ViroARPlaneSelector,
   ViroBox,
+  ViroSphere,
   ViroMaterials,
   ViroARSceneNavigator,
-  ViroTrackingStateConstants,
+  ViroNode,
+  ViroAnimations,
 } from '@viro-community/react-viro';
 import { styles } from '../styles/style';
 
+
 const PlaneDetectionScene = (props) => {
-  let texture = props?.sceneNavigator?.viroAppProps?.texture;
-  console.log(`texture:: ${texture}`);
+  let data = props.sceneNavigator.viroAppProps;
+  const [planeWidth, setPlaneWidth] = useState(0);
+  const [planeHeight, setPlaneHeight] = useState(0);
+  const [planeLength, setPlaneLength] = useState(0);
+  const [cubePosition, setCubePosition] = useState([0, -1, -1]);
 
-  ViroMaterials.createMaterials({
-    wood: {
-      diffuseTexture: require('../../assets/images/wood_texture.jpg'),
-    },
-    metal: {
-      diffuseTexture: require('../../assets/images/metal.jpg'),
-    },
-    polishedwood: {
-      diffuseTexture: require('../../assets/images/polished_wood.jpg'),
-    },
-    gold: {
-      diffuseTexture: require('../../assets/images/gold.jpg'),
-    },
-    white: {
-      diffuseTexture: require('../../assets/images/white.jpg'),
-    },
-  });
+  const _onPlaneSelected = (anchor) => {
+    const { width, height, length, position } = anchor;
+    setPlaneWidth(width);
+    setPlaneHeight(height);
+    setPlaneLength(length);
+    setCubePosition(position);
 
-  const onInitialized = (state, reason) => {
-    if (state == ViroTrackingStateConstants.TRACKING_NORMAL) {
-      console.log('Tracking Normal', state, reason);
-      // Show my AR Scene experience    
-    } else if (state == ViroTrackingStateConstants.TRACKING_LIMITED) {
-      // Prompt user to move phone around
-      console.log('Tracking Limited', state, reason);
-    } else if (state == ViroTrackingStateConstants.TRACKING_UNAVAILABLE) {
-      // Prompt error to user
-      console.log('Tracking Unavailable', state, reason);
+    console.log('Plane detected!');
+    console.log('Width:', width);
+    console.log('Height:', height);
+    console.log('Length:', length);
+  };
+  const [boxPosition, setBoxPosition] = useState([0, 0, -1]);
+  
+    const handleDrag = (draggedPos, source) => {
+      // Update the position of the box based on the drag position
+      setBoxPosition([draggedPos[0], draggedPos[1], -1]);
+    };
+
+  const renderObject = () => {
+    if (data.object) {
+      return (
+        <ViroNode position={[0, -1, -1]} rotation={[0, 0, 0]} scale={[4, 3, 4]} onDrag={handleDrag}>
+        {[...Array(16)].map((_, index) => (
+          <ViroNode
+            key={index}
+            position={[(index % 4) * 0.4, Math.floor(index / 4) * 0.4, -1]}
+            rotation={[0, 0, 0]}
+            scale={[1, 1, 1]}
+          >
+            <ViroBox
+              height={0.2}
+              length={2}
+              width={2}
+              position={[0, -0.4, -1]}
+              scale={[0.2, 0.2, 0.2]}
+              materials={data.texture}
+            />
+            <ViroBox
+              height={0.2}
+              length={2}
+              width={2}
+              position={[0, -0, -1]}
+              scale={[0.2, 0.2, 0.2]}
+              materials={data.texture}
+            />
+            {/* <ViroBox
+              height={2}
+              length={0.2}
+              width={2}
+              position={[0, -0.2, -1.2]}
+              scale={[0.2, 0.2, 0.2]}
+              materials={data.texture}
+            /> */}
+            <ViroBox
+              height={2}
+              length={2}
+              width={0.2}
+              position={[0.2, -0.2, -1]}
+              scale={[0.2, 0.2, 0.2]}
+              materials={data.texture}
+            />
+            <ViroBox
+              height={2}
+              length={2}
+              width={0.2}
+              position={[-0.2, -0.2, -1]}
+              scale={[0.2, 0.2, 0.2]}
+              materials={data.texture}
+            />
+          </ViroNode>
+        ))}
+      </ViroNode>
+      );
+    } else {
+      return (
+        <ViroSphere
+          radius={1}
+          position={cubePosition}
+          scale={[0.2, 0.2, 0.2]}
+          materials={data.texture}
+          animation={{ name: 'rotate', loop: true, run: true }}
+        />
+      );
     }
-  }
-
+  };
+  
   return (
-    <ViroARScene 
-      onTrackingUpdated={onInitialized}
-      anchorDetectionTypes={['PlanesHorizontal', 'PlanesVertical']}
-      onAnchorFound={() => console.log('onAnchorFound')}
-      onAnchorUpdated={() => console.log('onAnchorUpdated')}
-      onAnchorRemoved={() => console.log('onAnchorRemoved')}
-    > 
-      <ViroARPlaneSelector
-        minHeight={.5}
-        minWidth={.5}
-        alignment='Horizontal'
-        onPlaneSelected={(anchor) => console.log('plane selected:: ', anchor)}
+    <ViroARScene>
+         <ViroARPlaneSelector
+        minHeight={0.01}
+        minWidth={0.01}
+        onPlaneSelected={_onPlaneSelected}
+        alignment={ViroARPlaneSelector.HorizontalVertical}
       >
-        <ViroBox
-          height={0.25}
-          length={2.25}
-          width={1}
-          position={[0, 0, 0]}
-          scale={[.25, .25, .25]}
-          materials={texture}
-        />
-        <ViroBox
-          height={1.75}
-          length={0.25}
-          width={1}
-          position={[0, 0.25, -0.25]}
-          scale={[.25, .25, .25]}
-          materials={texture}
-        />
-        <ViroBox
-          height={0.25}
-          length={2.25}
-          width={1}
-          position={[0, 0.5, 0]}
-          scale={[.25, .25, .25]}
-          materials={texture}
-        />
-        <ViroBox
-          height={1.75}
-          length={0.25}
-          width={1}
-          position={[0, 0.25, 0.25]}
-          scale={[.25, .25, .25]}
-          materials={texture}
-        />
+      {renderObject()}
       </ViroARPlaneSelector>
     </ViroARScene>
   );
 };
 
-const AR = () => {
-  const textures = ['wood','metal','polishedwood','gold','white'];
-  const [texture, setTexture] = useState(textures[0]);
+ViroMaterials.createMaterials({
+  wood: {
+    diffuseTexture: require('../../assets/images/wood_texture.jpg'),
+  },
+  metal: {
+    diffuseTexture: require('../../assets/images/metal.jpg'),
+  },
+  polishedwood: {
+    diffuseTexture: require('../../assets/images/polished_wood.jpg'),
+  },
+  gold: {
+    diffuseTexture: require('../../assets/images/gold.jpg'),
+  },
+  white: {
+    diffuseTexture: require('../../assets/images/white.jpg'),
+  },
+});
 
-  const handleTextureChange = (index) => {
-    setTexture(textures[index]);
+ViroAnimations.registerAnimations({
+  rotate: {
+    duration: 2500,
+    properties: {
+      rotateY: '+=90',
+      rotateX: '+=90',
+      rotateZ: '+=90',
+    },
+  },
+});
+
+export default function App() {
+  const [currentMaterial, setCurrentMaterial] = useState('wood');
+  const [isBoxVisible, setIsBoxVisible] = useState(true);
+  const array = ['wood', 'metal', 'polishedwood', 'gold', 'white'];
+  const imageSources = {
+    wood: require('../../assets/images/wood_texture.jpg'),
+    metal: require('../../assets/images/metal.jpg'),
+    polishedwood: require('../../assets/images/polished_wood.jpg'),
+    gold: require('../../assets/images/gold.jpg'),
+    white: require('../../assets/images/white.jpg'),
+  };
+  const [showTextureSelection, setShowTextureSelection] = useState(true);
+  
+  const _handleTextureChange = (material) => {
+    setCurrentMaterial(material);
+  };
+
+  const _handleButtonClick = () => {
+    setShowTextureSelection(false);
+  };
+
+  const _handleObjectChange = () => {
+    if(isBoxVisible==true)
+     setIsBoxVisible(false);
+    else
+     setIsBoxVisible(true); // Change the material of the objects
   };
 
   return (
-    <>
+    <View style={styles.mainview}>
       <ViroARSceneNavigator
         autofocus={true}
-        initialScene={{
-          scene: PlaneDetectionScene,
-        }}
-        viroAppProps={{"texture": texture}}
-        style={styles.mainview}
+        initialScene={{ scene: PlaneDetectionScene }}
+        viroAppProps={{ texture: currentMaterial, object: isBoxVisible }}
+        style={{ flex: 9 }}
       />
-      <View style={styles.controlsview}>
-        <TouchableOpacity onPress={() => handleTextureChange(0)}>
-          <Text style={styles.Buttext}>Wood</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleTextureChange(1)}>
-          <Text style={styles.Buttext}>Metal</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleTextureChange(2)}>
-          <Text style={styles.Buttext}>Polished Wood</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleTextureChange(3)}>
-          <Text style={styles.Buttext}>Gold</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleTextureChange(4)}>
-          <Text style={styles.Buttext}>White</Text>
-        </TouchableOpacity>
-      </View>
-    </>
+      {showTextureSelection ? (
+        <View style={styles.controlsview}>
+          <TouchableOpacity onPress={_handleButtonClick} style={styles.button}>
+            <Text style={styles.buttonText}>Change Texture</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <View style={styles.controlsview}>
+          {array.map((material, index) => (
+            <TouchableOpacity
+              key={index}
+              onPress={() => _handleTextureChange(material)}
+              style={[styles.circle]}
+            >
+              <Image source={imageSources[material]} style={styles.circleImage} />
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
+      <TouchableOpacity onPress={_handleObjectChange} style={styles.button}>
+        <Text style={styles.buttonText}>Change Object</Text>
+      </TouchableOpacity>
+    </View>
   );
-};
+}
 
-export default AR;
+
+
