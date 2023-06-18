@@ -96,27 +96,57 @@ const PlaneDetectionScene = (props) => {
       );
     } else {
       return (
-        <ViroSphere
-          radius={1}
-          position={cubePosition}
-          scale={[0.2, 0.2, 0.2]}
-          materials={data.texture}
-          animation={{ name: 'rotate', loop: true, run: true }}
-        />
+        <ViroNode position={[0, -1, -1]} rotation={[0, 0, 0]} scale={[4, 3, 4]}>
+  <ViroNode position={[0, -0.4, -1]} scale={[0.4, 0.4, 0.4]}>
+    {/* Top surface of the table */}
+    <ViroBox
+      height={0.1}
+      length={2.4}
+      width={2.4}
+      materials={data.texture}
+    />
+
+    {/* Legs of the table */}
+    <ViroBox
+      height={1.5}
+      length={0.2}
+      width={0.2}
+      position={[0.8, -0.7, 0.8]}
+      materials={data.texture}
+    />
+    <ViroBox
+      height={1.5}
+      length={0.2}
+      width={0.2}
+      position={[0.8, -0.7, -0.8]}
+      materials={data.texture}
+    />
+    <ViroBox
+      height={1.5}
+      length={0.2}
+      width={0.2}
+      position={[-0.8, -0.7, 0.8]}
+      materials={data.texture}
+    />
+    <ViroBox
+      height={1.5}
+      length={0.2}
+      width={0.2}
+      position={[-0.8, -0.7, -0.8]}
+      materials={data.texture}
+    />
+  </ViroNode>
+</ViroNode>
+
       );
     }
   };
   
   return (
     <ViroARScene>
-         <ViroARPlaneSelector
-        minHeight={0.01}
-        minWidth={0.01}
-        onPlaneSelected={_onPlaneSelected}
-        alignment={ViroARPlaneSelector.HorizontalVertical}
-      >
+         
       {renderObject()}
-      </ViroARPlaneSelector>
+      
     </ViroARScene>
   );
 };
