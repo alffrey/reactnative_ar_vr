@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, Animated, PanResponder } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, Animated, PanResponder,ScrollView} from 'react-native';
 import {
   ViroARScene,
   ViroARPlaneSelector,
@@ -40,9 +40,9 @@ const PlaneDetectionScene = (props) => {
     };
 
   const renderObject = () => {
-    if (data.object) {
+    if (data.object=='bookshelf') {
       return (
-        <ViroNode position={[0, -1, -1]} rotation={[0, 0, 0]} scale={[4, 3, 4]} onDrag={handleDrag}>
+        <ViroNode position={[-1, -1, -1]} rotation={[0, 0, 0]} scale={[4, 3, 4]} onDrag={handleDrag}>
         {[...Array(16)].map((_, index) => (
           <ViroNode
             key={index}
@@ -94,9 +94,65 @@ const PlaneDetectionScene = (props) => {
         ))}
       </ViroNode>
       );
-    } else {
+    } else if(data.object=='chair'){
       return (
         <ViroNode position={[0, -1, -1]} rotation={[0, 0, 0]} scale={[4, 3, 4]}>
+  {/* Chair Seat */}
+  <ViroNode position={[0, -0.4, -1]} scale={[0.4, 0.4, 0.4]}>
+    <ViroBox
+      height={0.2}
+      length={1.5}
+      width={1.5}
+      materials={data.texture}
+    />
+
+    {/* Chair Backrest */}
+    <ViroBox
+      height={2}
+      length={0.2}
+      width={1.5}
+      position={[0, 1, -0.75]}
+      materials={data.texture}
+    />
+
+    {/* Chair Legs */}
+    <ViroBox
+      height={1.2}
+      length={0.2}
+      width={0.2}
+      position={[0.6, -0.8, -0.6]}
+      materials={data.texture}
+    />
+    <ViroBox
+      height={1.2}
+      length={0.2}
+      width={0.2}
+      position={[0.6, -0.6, 0.6]}
+      materials={data.texture}
+    />
+    <ViroBox
+      height={1.2}
+      length={0.2}
+      width={0.2}
+      position={[-0.6, -0.8, -0.6]}
+      materials={data.texture}
+    />
+    <ViroBox
+      height={1.2}
+      length={0.2}
+      width={0.2}
+      position={[-0.6, -0.6, 0.6]}
+      materials={data.texture}
+    />
+  </ViroNode>
+</ViroNode>
+
+
+      );
+    }
+      else if(data.object=='table'){
+        return(
+          <ViroNode position={[0, -1, -2]} rotation={[0, 0, 0]} scale={[4, 3, 4]}>
   <ViroNode position={[0, -0.4, -1]} scale={[0.4, 0.4, 0.4]}>
     {/* Top surface of the table */}
     <ViroBox
@@ -137,9 +193,11 @@ const PlaneDetectionScene = (props) => {
     />
   </ViroNode>
 </ViroNode>
+        )
+      }
+    
 
-      );
-    }
+  
   };
   
   return (
@@ -182,8 +240,9 @@ ViroAnimations.registerAnimations({
 
 export default function App() {
   const [currentMaterial, setCurrentMaterial] = useState('wood');
-  const [isBoxVisible, setIsBoxVisible] = useState(true);
+  const [currentObject, setCurrentObject] = useState('bookshelf');
   const array = ['wood', 'metal', 'polishedwood', 'gold', 'white'];
+  const objects=['bookshelf','chair','table']
   const imageSources = {
     wood: require('../../assets/images/wood_texture.jpg'),
     metal: require('../../assets/images/metal.jpg'),
@@ -191,8 +250,14 @@ export default function App() {
     gold: require('../../assets/images/gold.jpg'),
     white: require('../../assets/images/white.jpg'),
   };
+  // const objectSources = {
+  //   bookshelf: require('../../assets/images/bookshelf.jpeg'),
+  //   chair: require('../../assets/images/chair.jpeg'),
+  //   table: require('../../assets/images/table.jpeg'),
+    
+  // };
   const [showTextureSelection, setShowTextureSelection] = useState(true);
-  
+  const [showObjectSelection, setShowObjectSelection] = useState(true);
   const _handleTextureChange = (material) => {
     setCurrentMaterial(material);
   };
@@ -200,12 +265,11 @@ export default function App() {
   const _handleButtonClick = () => {
     setShowTextureSelection(false);
   };
-
-  const _handleObjectChange = () => {
-    if(isBoxVisible==true)
-     setIsBoxVisible(false);
-    else
-     setIsBoxVisible(true); // Change the material of the objects
+  const _handleButton2Click = () => {
+    setShowObjectSelection(false);
+  };
+  const _handleObjectChange = (object) => {
+    setCurrentObject(object);
   };
 
   return (
@@ -213,16 +277,16 @@ export default function App() {
       <ViroARSceneNavigator
         autofocus={true}
         initialScene={{ scene: PlaneDetectionScene }}
-        viroAppProps={{ texture: currentMaterial, object: isBoxVisible }}
+        viroAppProps={{ texture: currentMaterial, object: currentObject }}
         style={{ flex: 9 }}
       />
-      {showTextureSelection ? (
+      {/* {showTextureSelection ? (
         <View style={styles.controlsview}>
           <TouchableOpacity onPress={_handleButtonClick} style={styles.button}>
             <Text style={styles.buttonText}>Change Texture</Text>
           </TouchableOpacity>
         </View>
-      ) : (
+      ) : ( */}
         <View style={styles.controlsview}>
           {array.map((material, index) => (
             <TouchableOpacity
@@ -234,10 +298,27 @@ export default function App() {
             </TouchableOpacity>
           ))}
         </View>
-      )}
-      <TouchableOpacity onPress={_handleObjectChange} style={styles.button}>
-        <Text style={styles.buttonText}>Change Object</Text>
-      </TouchableOpacity>
+      {/* )} */}
+      {/* {showObjectSelection ? (
+        <View style={styles.controlsview}>
+          <TouchableOpacity onPress={_handleButton2Click} style={styles.button}>
+            <Text style={styles.buttonText}>Change Object</Text>
+          </TouchableOpacity>
+        </View>
+      ) : ( */}
+        <View style={styles.controlsview}>
+          {objects.map((object, index) => (
+            <TouchableOpacity
+              key={index}
+              onPress={() => _handleObjectChange(object)}
+              style={[styles.button, { marginRight: 10 }]}
+            >
+              <Text style={styles.buttonText}>{object}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      {/* )} */}
+     
     </View>
   );
 }

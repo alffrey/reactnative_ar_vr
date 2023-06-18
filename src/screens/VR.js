@@ -39,55 +39,173 @@ const PlaneDetectionScene = (props) => {
 
 
 
+  const renderObject = () => {
+    if (data.object=='bookshelf') {
+      return (
+        <ViroNode position={[-1, -1, -1]} rotation={[0, 0, 0]} scale={[4, 3, 4]} >
+        {[...Array(16)].map((_, index) => (
+          <ViroNode
+            key={index}
+            position={[(index % 4) * 0.4, Math.floor(index / 4) * 0.4, -1]}
+            rotation={[0, 0, 0]}
+            scale={[1, 1, 1]}
+          >
+            <ViroBox
+              height={0.2}
+              length={2}
+              width={2}
+              position={[0, -0.4, -1]}
+              scale={[0.2, 0.2, 0.2]}
+              materials={data.texture}
+            />
+            <ViroBox
+              height={0.2}
+              length={2}
+              width={2}
+              position={[0, -0, -1]}
+              scale={[0.2, 0.2, 0.2]}
+              materials={data.texture}
+            />
+            {/* <ViroBox
+              height={2}
+              length={0.2}
+              width={2}
+              position={[0, -0.2, -1.2]}
+              scale={[0.2, 0.2, 0.2]}
+              materials={data.texture}
+            /> */}
+            <ViroBox
+              height={2}
+              length={2}
+              width={0.2}
+              position={[0.2, -0.2, -1]}
+              scale={[0.2, 0.2, 0.2]}
+              materials={data.texture}
+            />
+            <ViroBox
+              height={2}
+              length={2}
+              width={0.2}
+              position={[-0.2, -0.2, -1]}
+              scale={[0.2, 0.2, 0.2]}
+              materials={data.texture}
+            />
+          </ViroNode>
+        ))}
+      </ViroNode>
+      );
+    } else if(data.object=='chair'){
+      return (
+        <ViroNode position={[0, -1, -1]} rotation={[0, 0, 0]} scale={[4, 3, 4]}>
+  {/* Chair Seat */}
+  <ViroNode position={[0, -0.4, -1]} scale={[0.4, 0.4, 0.4]}>
+    <ViroBox
+      height={0.2}
+      length={1.5}
+      width={1.5}
+      materials={data.texture}
+    />
+
+    {/* Chair Backrest */}
+    <ViroBox
+      height={2}
+      length={0.2}
+      width={1.5}
+      position={[0, 1, -0.75]}
+      materials={data.texture}
+    />
+
+    {/* Chair Legs */}
+    <ViroBox
+      height={1.2}
+      length={0.2}
+      width={0.2}
+      position={[0.6, -0.8, -0.6]}
+      materials={data.texture}
+    />
+    <ViroBox
+      height={1.2}
+      length={0.2}
+      width={0.2}
+      position={[0.6, -0.6, 0.6]}
+      materials={data.texture}
+    />
+    <ViroBox
+      height={1.2}
+      length={0.2}
+      width={0.2}
+      position={[-0.6, -0.8, -0.6]}
+      materials={data.texture}
+    />
+    <ViroBox
+      height={1.2}
+      length={0.2}
+      width={0.2}
+      position={[-0.6, -0.6, 0.6]}
+      materials={data.texture}
+    />
+  </ViroNode>
+</ViroNode>
+
+
+      );
+    }
+      else if(data.object=='table'){
+        return(
+          <ViroNode position={[0, -1, -2]} rotation={[0, 0, 0]} scale={[4, 3, 4]}>
+  <ViroNode position={[0, -0.4, -1]} scale={[0.4, 0.4, 0.4]}>
+    {/* Top surface of the table */}
+    <ViroBox
+      height={0.1}
+      length={2.4}
+      width={2.4}
+      materials={data.texture}
+    />
+
+    {/* Legs of the table */}
+    <ViroBox
+      height={1.5}
+      length={0.2}
+      width={0.2}
+      position={[0.8, -0.7, 0.8]}
+      materials={data.texture}
+    />
+    <ViroBox
+      height={1.5}
+      length={0.2}
+      width={0.2}
+      position={[0.8, -0.7, -0.8]}
+      materials={data.texture}
+    />
+    <ViroBox
+      height={1.5}
+      length={0.2}
+      width={0.2}
+      position={[-0.8, -0.7, 0.8]}
+      materials={data.texture}
+    />
+    <ViroBox
+      height={1.5}
+      length={0.2}
+      width={0.2}
+      position={[-0.8, -0.7, -0.8]}
+      materials={data.texture}
+    />
+  </ViroNode>
+</ViroNode>
+        )
+      }
+    
+
+  
+  };
+  
   return (
     <ViroScene>
-      <Viro360Image source={require("../../assets/images/vrpic.jpg")} />
-    <ViroNode position={[0, -4, -1]} rotation={[0, 0, 0]} scale={[4, 3, 4]}>
-      {[...Array(16)].map((_, index) => (
-        <ViroNode
-          key={index}
-          position={[(index % 4) * 0.4, Math.floor(index / 4) * 0.4, -1]}
-          rotation={[0, 0, 0]}
-          scale={[1, 1, 1]}
-        >
-          <ViroBox
-            height={0.2}
-            length={2}
-            width={2}
-            position={[0, -0.4, -1]}
-            scale={[0.2, 0.2, 0.2]}
-            materials={data.texture}
-          />
-          <ViroBox
-            height={0.2}
-            length={2}
-            width={2}
-            position={[0, -0, -1]}
-            scale={[0.2, 0.2, 0.2]}
-            materials={data.texture}
-          />
-          
-          <ViroBox
-            height={2}
-            length={2}
-            width={0.2}
-            position={[0.2, -0.2, -1]}
-            scale={[0.2, 0.2, 0.2]}
-            materials={data.texture}
-          />
-          <ViroBox
-            height={2}
-            length={2}
-            width={0.2}
-            position={[-0.2, -0.2, -1]}
-            scale={[0.2, 0.2, 0.2]}
-            materials={data.texture}
-          />
-        </ViroNode>
-      ))}
-    </ViroNode>
-   
-  </ViroScene>
+          <Viro360Image source={require("../../assets/images/vrpic.jpg")} />
+      {renderObject()}
+      
+    </ViroScene>
   );
 };
 
@@ -122,8 +240,9 @@ ViroAnimations.registerAnimations({
 
 export default function App() {
   const [currentMaterial, setCurrentMaterial] = useState('wood');
-  const [isBoxVisible, setIsBoxVisible] = useState(true);
+  const [currentObject, setCurrentObject] = useState('bookshelf');
   const array = ['wood', 'metal', 'polishedwood', 'gold', 'white'];
+  const objects=['bookshelf','chair','table']
   const imageSources = {
     wood: require('../../assets/images/wood_texture.jpg'),
     metal: require('../../assets/images/metal.jpg'),
@@ -131,8 +250,14 @@ export default function App() {
     gold: require('../../assets/images/gold.jpg'),
     white: require('../../assets/images/white.jpg'),
   };
+  // const objectSources = {
+  //   bookshelf: require('../../assets/images/bookshelf.jpeg'),
+  //   chair: require('../../assets/images/chair.jpeg'),
+  //   table: require('../../assets/images/table.jpeg'),
+    
+  // };
   const [showTextureSelection, setShowTextureSelection] = useState(true);
-
+  const [showObjectSelection, setShowObjectSelection] = useState(true);
   const _handleTextureChange = (material) => {
     setCurrentMaterial(material);
   };
@@ -140,30 +265,21 @@ export default function App() {
   const _handleButtonClick = () => {
     setShowTextureSelection(false);
   };
-
-  const _handleObjectChange = () => {
-    if (isBoxVisible == true)
-      setIsBoxVisible(false);
-    else
-      setIsBoxVisible(true); // Change the material of the objects
+  const _handleButton2Click = () => {
+    setShowObjectSelection(false);
   };
-
+  const _handleObjectChange = (object) => {
+    setCurrentObject(object);
+  };
   return (
     <View style={styles.mainview}>
       <ViroVRSceneNavigator
         autofocus={true}
         initialScene={{ scene: PlaneDetectionScene }}
-        viroAppProps={{ texture: currentMaterial, object: isBoxVisible }}
+        viroAppProps={{ texture: currentMaterial, object: currentObject}}
         style={{ flex: 9 }}
       />
-      {showTextureSelection ? (
-        <View style={styles.controlsview}>
-          <TouchableOpacity onPress={_handleButtonClick} style={styles.button}>
-            <Text style={styles.buttonText}>Change Texture</Text>
-          </TouchableOpacity>
-        </View>
-      ) : (
-        <View style={styles.controlsview}>
+      <View style={styles.controlsview}>
           {array.map((material, index) => (
             <TouchableOpacity
               key={index}
@@ -174,11 +290,26 @@ export default function App() {
             </TouchableOpacity>
           ))}
         </View>
-      )}
-      <TouchableOpacity onPress={_handleObjectChange} style={styles.button}>
-        <Text style={styles.buttonText}>Change Object</Text>
-      </TouchableOpacity>
-    </View>
+      {/* )} */}
+      {/* {showObjectSelection ? (
+        <View style={styles.controlsview}>
+          <TouchableOpacity onPress={_handleButton2Click} style={styles.button}>
+            <Text style={styles.buttonText}>Change Object</Text>
+          </TouchableOpacity>
+        </View>
+      ) : ( */}
+        <View style={styles.controlsview}>
+          {objects.map((object, index) => (
+            <TouchableOpacity
+              key={index}
+              onPress={() => _handleObjectChange(object)}
+              style={[styles.button, { marginRight: 10 }]}
+            >
+              <Text style={styles.buttonText}>{object}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+        </View>
   );
 }
 

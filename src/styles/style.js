@@ -41,7 +41,8 @@ var styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     paddingHorizontal: 20,
     paddingVertical: 10,
-    marginBottom: 10, // Add marginBottom to create a gap
+    marginBottom: 10,
+     // Add marginBottom to create a gap
   },
   circle: {
     width: 50,
@@ -62,6 +63,7 @@ var styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     alignSelf: 'center',
+    
   },
   buttonText: {
     color: 'white',
