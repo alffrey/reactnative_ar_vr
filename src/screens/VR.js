@@ -1,13 +1,186 @@
-import React from 'react';
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Image, Animated, PanResponder } from 'react-native';
+import {
+  ViroARScene,
+  ViroARPlaneSelector,
+  ViroBox,
+  ViroSphere,
+  ViroMaterials,
+  ViroARSceneNavigator,
+  ViroAnimations,
+  ViroNode,
+  ViroScene,
+  ViroVRSceneNavigator,
+  Viro360Image,
+} from '@viro-community/react-viro';
 import { styles } from '../styles/style';
 
-export default function VR(){
-    return(
-        <View>
-            <Text style={styles.text}>
-                VR Screen
-            </Text>
+
+const PlaneDetectionScene = (props) => {
+  let data = props.sceneNavigator.viroAppProps;
+  
+  const [planeWidth, setPlaneWidth] = useState(0);
+  const [planeHeight, setPlaneHeight] = useState(0);
+  const [planeLength, setPlaneLength] = useState(0);
+  const [cubePosition, setCubePosition] = useState([0, -1, -1]);
+  
+  const _onPlaneSelected = (anchor) => {
+    const { width, height, length, position } = anchor;
+    setPlaneWidth(width);
+    setPlaneHeight(height);
+    setPlaneLength(length);
+    setCubePosition(position);
+
+    console.log('Plane detected!');
+    console.log('Width:', width);
+    console.log('Height:', height);
+    console.log('Length:', length);
+  };
+
+
+
+  return (
+    <ViroScene>
+      <Viro360Image source={require("../../assets/images/vrpic.jpg")} />
+    <ViroNode position={[0, -4, -1]} rotation={[0, 0, 0]} scale={[4, 3, 4]}>
+      {[...Array(16)].map((_, index) => (
+        <ViroNode
+          key={index}
+          position={[(index % 4) * 0.4, Math.floor(index / 4) * 0.4, -1]}
+          rotation={[0, 0, 0]}
+          scale={[1, 1, 1]}
+        >
+          <ViroBox
+            height={0.2}
+            length={2}
+            width={2}
+            position={[0, -0.4, -1]}
+            scale={[0.2, 0.2, 0.2]}
+            materials={data.texture}
+          />
+          <ViroBox
+            height={0.2}
+            length={2}
+            width={2}
+            position={[0, -0, -1]}
+            scale={[0.2, 0.2, 0.2]}
+            materials={data.texture}
+          />
+          
+          <ViroBox
+            height={2}
+            length={2}
+            width={0.2}
+            position={[0.2, -0.2, -1]}
+            scale={[0.2, 0.2, 0.2]}
+            materials={data.texture}
+          />
+          <ViroBox
+            height={2}
+            length={2}
+            width={0.2}
+            position={[-0.2, -0.2, -1]}
+            scale={[0.2, 0.2, 0.2]}
+            materials={data.texture}
+          />
+        </ViroNode>
+      ))}
+    </ViroNode>
+   
+  </ViroScene>
+  );
+};
+
+ViroMaterials.createMaterials({
+  wood: {
+    diffuseTexture: require('../../assets/images/wood_texture.jpg'),
+  },
+  metal: {
+    diffuseTexture: require('../../assets/images/metal.jpg'),
+  },
+  polishedwood: {
+    diffuseTexture: require('../../assets/images/polished_wood.jpg'),
+  },
+  gold: {
+    diffuseTexture: require('../../assets/images/gold.jpg'),
+  },
+  white: {
+    diffuseTexture: require('../../assets/images/white.jpg'),
+  },
+});
+
+ViroAnimations.registerAnimations({
+  rotate: {
+    duration: 2500,
+    properties: {
+      rotateY: '+=90',
+      rotateX: '+=90',
+      rotateZ: '+=90',
+    },
+  },
+});
+
+export default function App() {
+  const [currentMaterial, setCurrentMaterial] = useState('wood');
+  const [isBoxVisible, setIsBoxVisible] = useState(true);
+  const array = ['wood', 'metal', 'polishedwood', 'gold', 'white'];
+  const imageSources = {
+    wood: require('../../assets/images/wood_texture.jpg'),
+    metal: require('../../assets/images/metal.jpg'),
+    polishedwood: require('../../assets/images/polished_wood.jpg'),
+    gold: require('../../assets/images/gold.jpg'),
+    white: require('../../assets/images/white.jpg'),
+  };
+  const [showTextureSelection, setShowTextureSelection] = useState(true);
+
+  const _handleTextureChange = (material) => {
+    setCurrentMaterial(material);
+  };
+
+  const _handleButtonClick = () => {
+    setShowTextureSelection(false);
+  };
+
+  const _handleObjectChange = () => {
+    if (isBoxVisible == true)
+      setIsBoxVisible(false);
+    else
+      setIsBoxVisible(true); // Change the material of the objects
+  };
+
+  return (
+    <View style={styles.mainview}>
+      <ViroVRSceneNavigator
+        autofocus={true}
+        initialScene={{ scene: PlaneDetectionScene }}
+        viroAppProps={{ texture: currentMaterial, object: isBoxVisible }}
+        style={{ flex: 9 }}
+      />
+      {showTextureSelection ? (
+        <View style={styles.controlsview}>
+          <TouchableOpacity onPress={_handleButtonClick} style={styles.button}>
+            <Text style={styles.buttonText}>Change Texture</Text>
+          </TouchableOpacity>
         </View>
-    )
+      ) : (
+        <View style={styles.controlsview}>
+          {array.map((material, index) => (
+            <TouchableOpacity
+              key={index}
+              onPress={() => _handleTextureChange(material)}
+              style={[styles.circle]}
+            >
+              <Image source={imageSources[material]} style={styles.circleImage} />
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
+      <TouchableOpacity onPress={_handleObjectChange} style={styles.button}>
+        <Text style={styles.buttonText}>Change Object</Text>
+      </TouchableOpacity>
+    </View>
+  );
 }
+
+
+
