@@ -34,7 +34,7 @@ var styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   controlsview: {
-    flex: 0.1,
+    flex: 0.15,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -59,7 +59,7 @@ var styles = StyleSheet.create({
     borderRadius: 20,
   },
   button: {
-    backgroundColor: '#EE82EE',
+    backgroundColor: '#039BE5',
     borderRadius: 5,
     padding: 10,
     alignSelf: 'center',
@@ -75,13 +75,14 @@ var styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     alignSelf: 'center',
-    marginTop: 10, // Add marginTop to create a gap
+    marginTop: 10, 
   },
   changeObjectButtonText: {
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
   },
+  
   });
  export {styles};
 

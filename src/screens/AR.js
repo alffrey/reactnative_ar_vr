@@ -25,6 +25,7 @@ const PlaneDetectionScene = (props) => {
     setPlaneWidth(width);
     setPlaneHeight(height);
     setPlaneLength(length);
+    console.log(position)
     setCubePosition(position);
 
     console.log('Plane detected!');
@@ -42,7 +43,7 @@ const PlaneDetectionScene = (props) => {
   const renderObject = () => {
     if (data.object=='bookshelf') {
       return (
-        <ViroNode position={[-1, -1, -1]} rotation={[0, 0, 0]} scale={[4, 3, 4]} onDrag={handleDrag}>
+        <ViroNode position={cubePosition} rotation={[0, 0, 0]} scale={[4, 3, 4]} onDrag={handleDrag}>
         {[...Array(16)].map((_, index) => (
           <ViroNode
             key={index}
@@ -96,7 +97,7 @@ const PlaneDetectionScene = (props) => {
       );
     } else if(data.object=='chair'){
       return (
-        <ViroNode position={[0, -1, -1]} rotation={[0, 0, 0]} scale={[4, 3, 4]}>
+        <ViroNode position={[0, -1, -1]} rotation={[0, 0, 0]} scale={[4, 3, 4]} onDrag={handleDrag}>
   {/* Chair Seat */}
   <ViroNode position={[0, -0.4, -1]} scale={[0.4, 0.4, 0.4]}>
     <ViroBox
@@ -152,7 +153,7 @@ const PlaneDetectionScene = (props) => {
     }
       else if(data.object=='table'){
         return(
-          <ViroNode position={[0, -1, -2]} rotation={[0, 0, 0]} scale={[4, 3, 4]}>
+          <ViroNode position={[0, -1, -2]} rotation={[0, 0, 0]} scale={[4, 3, 4]} onDrag={handleDrag}>
   <ViroNode position={[0, -0.4, -1]} scale={[0.4, 0.4, 0.4]}>
     {/* Top surface of the table */}
     <ViroBox
@@ -202,9 +203,14 @@ const PlaneDetectionScene = (props) => {
   
   return (
     <ViroARScene>
-         
+         <ViroARPlaneSelector
+        minHeight={0.01}
+        minWidth={0.01}
+        onPlaneSelected={_onPlaneSelected}
+        alignment={ViroARPlaneSelector.HorizontalVertical}
+      >
       {renderObject()}
-      
+      </ViroARPlaneSelector>
     </ViroARScene>
   );
 };
@@ -280,13 +286,7 @@ export default function App() {
         viroAppProps={{ texture: currentMaterial, object: currentObject }}
         style={{ flex: 9 }}
       />
-      {/* {showTextureSelection ? (
-        <View style={styles.controlsview}>
-          <TouchableOpacity onPress={_handleButtonClick} style={styles.button}>
-            <Text style={styles.buttonText}>Change Texture</Text>
-          </TouchableOpacity>
-        </View>
-      ) : ( */}
+      
         <View style={styles.controlsview}>
           {array.map((material, index) => (
             <TouchableOpacity
@@ -298,14 +298,7 @@ export default function App() {
             </TouchableOpacity>
           ))}
         </View>
-      {/* )} */}
-      {/* {showObjectSelection ? (
-        <View style={styles.controlsview}>
-          <TouchableOpacity onPress={_handleButton2Click} style={styles.button}>
-            <Text style={styles.buttonText}>Change Object</Text>
-          </TouchableOpacity>
-        </View>
-      ) : ( */}
+     
         <View style={styles.controlsview}>
           {objects.map((object, index) => (
             <TouchableOpacity
@@ -317,7 +310,7 @@ export default function App() {
             </TouchableOpacity>
           ))}
         </View>
-      {/* )} */}
+      
      
     </View>
   );
