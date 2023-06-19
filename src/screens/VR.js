@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, Animated, PanResponder } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, Animated, PanResponder,ScrollView } from 'react-native';
 import {
   ViroARScene,
   ViroARPlaneSelector,
@@ -42,7 +42,7 @@ const PlaneDetectionScene = (props) => {
   const renderObject = () => {
     if (data.object=='bookshelf') {
       return (
-        <ViroNode position={[-1, -1, -1]} rotation={[0, 0, 0]} scale={[4, 3, 4]} >
+        <ViroNode position={[-6, -6, -9]} rotation={[0, 0, 0]} scale={[4, 3, 4]} >
         {[...Array(16)].map((_, index) => (
           <ViroNode
             key={index}
@@ -96,7 +96,7 @@ const PlaneDetectionScene = (props) => {
       );
     } else if(data.object=='chair'){
       return (
-        <ViroNode position={[0, -1, -1]} rotation={[0, 0, 0]} scale={[4, 3, 4]}>
+        <ViroNode position={[-6, -6, -9]} rotation={[0, 0, 0]} scale={[8, 6, 8]}>
   {/* Chair Seat */}
   <ViroNode position={[0, -0.4, -1]} scale={[0.4, 0.4, 0.4]}>
     <ViroBox
@@ -195,14 +195,25 @@ const PlaneDetectionScene = (props) => {
 </ViroNode>
         )
       }
-    
-
+  
   
   };
-  
+  const background=()=>{
+    if(data.bg==true){
+    return(
+      <Viro360Image source={require("../../assets/images/vrpic.jpg")} />
+    )
+    }
+    else{
+      return(
+        <Viro360Image source={require("../../assets/images/vrpic2.jpg")} />
+      )
+    }
+  }
   return (
     <ViroScene>
-          <Viro360Image source={require("../../assets/images/vrpic.jpg")} />
+          
+          {background()}
       {renderObject()}
       
     </ViroScene>
@@ -240,7 +251,7 @@ ViroAnimations.registerAnimations({
 
 export default function App() {
   const [currentMaterial, setCurrentMaterial] = useState('wood');
-  const [currentObject, setCurrentObject] = useState('bookshelf');
+  const [currentObject, setCurrentObject] = useState('chair');
   const array = ['wood', 'metal', 'polishedwood', 'gold', 'white'];
   const objects=['bookshelf','chair','table']
   const imageSources = {
@@ -258,6 +269,7 @@ export default function App() {
   // };
   const [showTextureSelection, setShowTextureSelection] = useState(true);
   const [showObjectSelection, setShowObjectSelection] = useState(true);
+  const [background,setBackground]=useState(true);
   const _handleTextureChange = (material) => {
     setCurrentMaterial(material);
   };
@@ -271,12 +283,16 @@ export default function App() {
   const _handleObjectChange = (object) => {
     setCurrentObject(object);
   };
+  const handlebackgroundchange=()=>{
+    setBackground(!background);
+  }
   return (
+    
     <View style={styles.mainview}>
       <ViroVRSceneNavigator
         autofocus={true}
         initialScene={{ scene: PlaneDetectionScene }}
-        viroAppProps={{ texture: currentMaterial, object: currentObject}}
+        viroAppProps={{ texture: currentMaterial, object: currentObject, bg:background}}
         style={{ flex: 9 }}
       />
       <View style={styles.controlsview}>
@@ -290,14 +306,7 @@ export default function App() {
             </TouchableOpacity>
           ))}
         </View>
-      {/* )} */}
-      {/* {showObjectSelection ? (
-        <View style={styles.controlsview}>
-          <TouchableOpacity onPress={_handleButton2Click} style={styles.button}>
-            <Text style={styles.buttonText}>Change Object</Text>
-          </TouchableOpacity>
-        </View>
-      ) : ( */}
+     
         <View style={styles.controlsview}>
           {objects.map((object, index) => (
             <TouchableOpacity
@@ -309,6 +318,18 @@ export default function App() {
             </TouchableOpacity>
           ))}
         </View>
+      
+        <View style={styles.controlsview}>
+          
+            <TouchableOpacity
+              onPress={() => handlebackgroundchange()}
+              style={[styles.button, { marginRight: 10 }]}
+            >
+              <Text style={styles.buttonText}>Change Background</Text>
+            </TouchableOpacity>
+          
+        </View>
+        
         </View>
   );
 }
