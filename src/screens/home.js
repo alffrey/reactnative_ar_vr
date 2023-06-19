@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, ImageBackground, Animated } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, ImageBackground, Image, Animated, ScrollView } from 'react-native';
 
 import logo from '../../assets/images/logo.png';
 
@@ -36,8 +36,19 @@ const Home = ({ navigation }) => {
   });
 
   return (
-    <ImageBackground source={logo} style={styles.backgroundImage} resizeMode="contain">
-      <Animated.View
+    <ScrollView
+      style={styles.body}
+
+    >
+        <View style={styles.imageview}>
+        <Image
+          style={styles.image}
+          source={logo}
+          resizeMode='stretch'
+        />
+        </View>
+        <View style={styles.backgroundImage}>
+        <Animated.View
         style={[
           styles.container,
           {
@@ -57,14 +68,44 @@ const Home = ({ navigation }) => {
           <Text style={styles.buttonText}>View in Virtual Reality</Text>
         </TouchableOpacity>
       </Animated.View>
-    </ImageBackground>
+      </View>
+
+      
+    </ScrollView>
+    // <ImageBackground source={logo} style={styles.backgroundImage} resizeMode="contain" position="top"> 
+    //   <Animated.View
+    //     style={[
+    //       styles.container,
+    //       {
+    //         transform: [
+    //           { translateY: translationAnimation },
+    //           { rotate: rotationInterpolation },
+    //         ],
+    //       },
+    //     ]}
+    //   >
+    //     <Text style={styles.title}>Welcome to the Container Store</Text>
+    //     <Text style={styles.subtitle}>Choose your immersive experience:</Text>
+    //     <TouchableOpacity style={styles.button} onPress={() => handleNavigation('AR')}>
+    //       <Text style={styles.buttonText}>View in Augmented Reality</Text>
+    //     </TouchableOpacity>
+    //     <TouchableOpacity style={styles.button} onPress={() => handleNavigation('VR')}>
+    //       <Text style={styles.buttonText}>View in Virtual Reality</Text>
+    //     </TouchableOpacity>
+    //   </Animated.View>
+    // </ImageBackground>
   );
 };
 const styles = StyleSheet.create({
+  body: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: '#ffffff',
+  },
   backgroundImage: {
     flex: 1,
     width: '100%',
-    height: '75%',
+    height: 400,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -87,7 +128,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   button: {
-    backgroundColor: '#EE82EE',
+    backgroundColor: '#039BE5',
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 24,
@@ -100,6 +141,14 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  image: {
+    width: 400,
+    height: 225,
+    margin: 10,
+  },
+  imageview: {
+    alignItems: 'center',
   },
 });
 
